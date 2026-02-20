@@ -33,6 +33,13 @@ http://127.0.0.1:5000/
 
 This endpoint returns facility-level greenhouse gas emissions data. Results can be filtered, paginated, and returned in JSON or CSV format.
 
+This version of the API supports:
+
+- Filtering on **string columns** (including values with spaces, like multi-word facility names)
+- Filtering on **numeric columns**
+- Filtering using **column names that contain spaces** (URL-encode spaces as `%20`)
+- Pagination via `limit` and `offset`
+
 ---
 
 ### Query Parameters
@@ -41,10 +48,12 @@ This endpoint returns facility-level greenhouse gas emissions data. Results can 
   Default: `json`  
   Controls the output format.
 
-- **filterby** (optional): Column name to filter by.
+- **filterby** (optional): Column name to filter by.  
+  If provided, `filtervalue` must also be provided.
 
 - **filtervalue** (optional): Value used to filter rows in the specified column.  
-  Required if `filterby` is provided. Filtering uses exact matches.
+  Required when `filterby` is provided. Filtering uses exact matches.  
+  For values with spaces, you can use `+` (or `%20`) in URLs.
 
 - **limit** (optional): Maximum number of rows to return.  
   Default: `1000`
@@ -127,19 +136,23 @@ You may use any of the following columns with `filterby`:
 
 ---
 
-### Example Queries
+## Example Queries (Working Links)
 
-Return first 10 rows in JSON:
+### 1) Return first 5 rows in JSON
 
-http://127.0.0.1:5000/api/list?format=json&limit=10
+http://127.0.0.1:5000/api/list?format=json&limit=5
 
-Return 5 facilities in a given state, skipping first 2:
+### 2) Filter by a column name with spaces + a multi-word facility name (example:AJAX PLANT)
 
-http://127.0.0.1:5000/api/list?format=json&filterby=State&filtervalue=6&limit=5&offset=2
+http://127.0.0.1:5000/api/list?format=json&filterby=Facility%20Name&filtervalue=AJAX+PLANT&limit=5
 
-Return results in CSV:
+### 3) Same query as above, but return CSV
 
-http://127.0.0.1:5000/api/list?format=csv&limit=20
+http://127.0.0.1:5000/api/list?format=csv&filterby=Facility%20Name&filtervalue=AJAX+PLANT&limit=5
+
+### 4) Pagination example: skip the first 2 rows and return the next 5
+
+http://127.0.0.1:5000/api/list?format=json&limit=5&offset=2
 
 ---
 
@@ -155,7 +168,10 @@ The API returns a plain-text error message if:
 
 ## Notes
 
-- Filtering uses exact matches only.
+- Filtering uses exact matches.
+- If you include `filterby`, you must include `filtervalue`.
+- For column names with spaces, encode spaces as `%20` (e.g., `Facility%20Name`).
+- For filter values with spaces, use `+` or `%20` (e.g., `AJAX+PLANT`).
 - Pagination is handled with `limit` and `offset`.
 - JSON output is returned as a list of records.
 - CSV output is returned as raw CSV text.

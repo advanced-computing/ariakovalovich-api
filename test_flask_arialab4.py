@@ -39,10 +39,7 @@ def get_test_df():
 
 def _text(maybe_response):
     """
-    convert_to_format may return either:
-    - a Flask Response object
-    - or a plain string
-
+    convert_to_format may return either a Flask Response object or a plain string
     This helper extracts the text in either case.
     """
     if hasattr(maybe_response, "get_data"):
@@ -52,8 +49,8 @@ def _text(maybe_response):
 
 def _normalize_for_compare(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Normalize dataframes before comparison to avoid false failures from:
-    - dtype differences after CSV/JSON round-tripping (e.g., ints vs floats)
+    Normalize dataframes before comparison to avoid failures from:
+    - dtype differences after CSV/JSON changes
     - whitespace differences (e.g., 'N' vs 'N       ')
     """
     out = df.reset_index(drop=True).copy()
@@ -80,7 +77,7 @@ def test_filter_by_value_state_string():
 
 def test_filter_by_value_numeric_facility_id():
     df = get_test_df()
-    # filter_by_value accepts strings (like query params), so we test with "1010475"
+    # filter_by_value accepts strings, so we test with "1010475"
     result = filter_by_value(df, "Facility Id", "1010475").reset_index(drop=True)
 
     expected = df[df["Facility Id"] == 1010475].reset_index(drop=True)

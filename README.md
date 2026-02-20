@@ -1,4 +1,4 @@
-# GHGP Emissions API Documentation
+# Greenhouse Gas Reporting Program Emissions API Documentation
 
 ## Connecting to the API
 

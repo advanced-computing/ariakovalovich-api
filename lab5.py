@@ -10,5 +10,3 @@ def check_unique(series: pd.Series):
 
 def check_no_missing(series: pd.Series):
     return pd.Series([series.notna().all()])
-
-    

@@ -1,7 +1,7 @@
 import io
 import pandas as pd
 
-from flask_arialab4 import filter_by_value, apply_limit_offset, convert_to_format
+from app import filter_by_value, apply_limit_offset, convert_to_format
 
 
 def get_test_df():
